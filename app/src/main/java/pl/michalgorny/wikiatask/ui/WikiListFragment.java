@@ -11,6 +11,7 @@ import com.paging.listview.PagingListView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,6 +40,7 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
 
     private WikiPagingAdapter mWikiPagingAdapter;
     private WikiManager mWikiManager;
+    private boolean mHasMoreItems = false;
 
     public WikiListFragment() {}
 
@@ -51,6 +53,8 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
         setRetainInstance(true);
 
         mWikiManager = new WikiManager();
+        mWikiManager.getWikis(false);
+
         List<WikiItemResponse> wikis = mWikiManager.getWikiList();
         mWikiPagingAdapter = new WikiPagingAdapter(getActivity().getApplicationContext(), wikis);
     }
@@ -59,15 +63,25 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.wiki_fragment_list, container, false);
         ButterKnife.inject(this, view);
+        initalizeListView();
+        return view;
+    }
+
+    private void initalizeListView() {
+        mWikiPagingListView.setHasMoreItems(mHasMoreItems);
         mWikiPagingListView.setAdapter(mWikiPagingAdapter);
         mWikiPagingListView.setPagingableListener(this);
-        return view;
+    }
+
+    @Override
+    public void onLoadMoreItems() {
+        mWikiManager.getWikis(true);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);//TODO check is it working with configuration changed
+        ButterKnife.reset(this);
     }
 
     @Override
@@ -76,15 +90,14 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
         mBus.unregister(this);
     }
 
-    @Override
-    public void onLoadMoreItems() {
-        Timber.d("onLoadMoreItems");
-        mWikiManager.getMoreWikis();
-    }
-
     @Subscribe
     public void handleNewWikis(NewWikiAvailableEvent event){
-        mWikiPagingListView.onFinishLoading(false, mWikiManager.getWikiList());
+        addNewItemToList(event.hasMoreWikisToDownload(), event.getNewItemsList());
+    }
+
+    private void addNewItemToList(boolean hasMoreItems, List<WikiItemResponse> newItems) {
+        mHasMoreItems = hasMoreItems;
+        mWikiPagingListView.onFinishLoading(mHasMoreItems, newItems);
     }
 
     @Subscribe

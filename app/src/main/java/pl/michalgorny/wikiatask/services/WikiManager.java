@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import pl.michalgorny.wikiatask.WikiApplication;
 import pl.michalgorny.wikiatask.events.NewWikiAvailableEvent;
+import pl.michalgorny.wikiatask.events.WikiDownloadFailedEvent;
 import pl.michalgorny.wikiatask.services.responses.WikiItemResponse;
 import pl.michalgorny.wikiatask.services.responses.WikiGetListResponse;
 import retrofit.Callback;
@@ -22,12 +23,15 @@ import timber.log.Timber;
  */
 public class WikiManager {
 
+    private static final int DEFAULT_BATCH_SIZE = 25;
+    private static final int DEFAULT_BATCH_INDEX = 1;
+
     @Inject
     Bus mBus;
 
     private static final String WIKI_URL = "http://www.wikia.com";
     private WikiService mWikiService;
-    private int mCurrentBatch = 1;
+    private int mCurrentBatch = DEFAULT_BATCH_INDEX;
 
     private List<WikiItemResponse> mWikiList = new ArrayList<>();
 
@@ -39,32 +43,33 @@ public class WikiManager {
     }
 
     public List<WikiItemResponse> getWikiList() {
-        if (mWikiList.isEmpty()){
-            downloadWikis();
-        }
         return mWikiList;
     }
 
-    private void downloadWikis(){
-        mWikiService.getWikis(mCurrentBatch, new Callback<WikiGetListResponse>() {
+    private void downloadWikis(int batch){
+        mWikiService.getWikis(batch, new Callback<WikiGetListResponse>() {
             @Override
             public void success(WikiGetListResponse wiki, Response response) {
                 Timber.d("Success! Wikis downloaded.");
-                mWikiList.addAll(wiki.getItems());
-                mBus.post(new NewWikiAvailableEvent());
+
+                mCurrentBatch = wiki.getCurrentBatch();
+                boolean isLastBatchDownloaded = wiki.getCurrentBatch().equals(wiki.getBatches());
+
+                mBus.post(new NewWikiAvailableEvent(!isLastBatchDownloaded, wiki.getItems()));
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Timber.e("Error! Wikis download failed. Cause: " + error.getCause());
                 error.printStackTrace();
+
+                mBus.post(new WikiDownloadFailedEvent(error.getMessage()));
             }
         });
     }
 
-    public void getMoreWikis(){
-        mCurrentBatch++;
-        getWikiList();
+    public void getWikis(boolean incrementBatch){
+        downloadWikis(incrementBatch ? ++mCurrentBatch : mCurrentBatch);
     }
 
 }
