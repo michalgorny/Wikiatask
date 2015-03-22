@@ -8,26 +8,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.paging.listview.PagingBaseAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.michalgorny.wikiatask.R;
-import pl.michalgorny.wikiatask.services.responses.WikiItemResponse;
+import pl.michalgorny.wikiatask.pojos.Wiki;
+import timber.log.Timber;
 
 /**
  * Adapter populating list of wiki handling
  */
 public class WikiPagingAdapter extends PagingBaseAdapter{
 
-    private final List<WikiItemResponse> mWikiList;
+    private final Context mContext;
+    private final List<Wiki> mWikiList;
     private LayoutInflater mInflater;
 
-    public WikiPagingAdapter(Context context, List<WikiItemResponse> list) {
+    private final int mImageWidth, mImageHeight;
+
+    public WikiPagingAdapter(Context context, List<Wiki> list) {
         super(list);
+        mContext = context;
         mInflater = LayoutInflater.from(context);
         mWikiList = list;
+        mImageWidth = mContext.getResources().getInteger(R.integer.list_image_width);
+        mImageHeight = mContext.getResources().getInteger(R.integer.list_image_height);
     }
 
     @Override
@@ -43,10 +51,30 @@ public class WikiPagingAdapter extends PagingBaseAdapter{
             viewHolder = (WikiViewHolderItem) convertView.getTag();
         }
 
-        WikiItemResponse wiki = getItem(position);
+        Wiki wiki = getItem(position);
 
-        viewHolder.title.setText(wiki.getName());
-        viewHolder.url.setText(wiki.getDomain());
+        viewHolder.title.setText(wiki.getTitle());
+        viewHolder.url.setText(wiki.getUrl());
+
+        if (wiki.getUrlImage() != null && wiki.getUrlImage().isEmpty()){
+            wiki.setUrlImage(null);
+        }
+
+        /**
+         * TODO: In order to improve loading picture on list it would be be a good feature when api
+         * will allow to get preview in form a small resized image. Currently we can request for
+         * details with width and height parameters but it return a link to image which is cropped
+         * and we lost some area of picture.
+         */
+
+        Timber.d("Downloading " + wiki.getUrlImage());
+        Picasso.with(mContext)
+                .load(wiki.getUrlImage())
+                .centerCrop()
+                .resize(mImageWidth, mImageHeight)
+                .placeholder(R.drawable.photo_placeholder_loading)
+                .error(R.drawable.error_image)
+                .into(viewHolder.image);
 
         return convertView;
     }
@@ -57,7 +85,7 @@ public class WikiPagingAdapter extends PagingBaseAdapter{
     }
 
     @Override
-    public WikiItemResponse getItem(int position) {
+    public Wiki getItem(int position) {
         return mWikiList.get(position);
     }
 

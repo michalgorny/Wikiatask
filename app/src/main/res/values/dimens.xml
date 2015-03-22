@@ -3,4 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="image_list_padding">10dp</dimen>
+
+    <!-- Size image for Picasso -->
+    <integer name="list_image_width">300</integer>
+    <integer name="list_image_height">300</integer>
+
+    <!-- Size of ImageView in layout for list row -->
+    <dimen name="imageview_list_width">130dp</dimen>
+    <dimen name="imageview_list_height">130dp</dimen>
 </resources>

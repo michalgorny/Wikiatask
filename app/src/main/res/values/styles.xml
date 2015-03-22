@@ -5,4 +5,12 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="item_list_text_title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="item_list_text_url">
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>

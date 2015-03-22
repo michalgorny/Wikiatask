@@ -11,7 +11,6 @@ import com.paging.listview.PagingListView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,9 +22,9 @@ import pl.michalgorny.wikiatask.WikiApplication;
 import pl.michalgorny.wikiatask.adapters.WikiPagingAdapter;
 import pl.michalgorny.wikiatask.events.NewWikiAvailableEvent;
 import pl.michalgorny.wikiatask.events.WikiDownloadFailedEvent;
-import pl.michalgorny.wikiatask.services.responses.WikiItemResponse;
-import pl.michalgorny.wikiatask.services.WikiManager;
-import timber.log.Timber;
+import pl.michalgorny.wikiatask.api.responses.WikiItemResponse;
+import pl.michalgorny.wikiatask.api.services.WikiManager;
+import pl.michalgorny.wikiatask.pojos.Wiki;
 
 /**
  * Main fragment class which is responsible to display wiki posts on the list
@@ -55,7 +54,7 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
         mWikiManager = new WikiManager();
         mWikiManager.getWikis(false);
 
-        List<WikiItemResponse> wikis = mWikiManager.getWikiList();
+        List<Wiki> wikis = mWikiManager.getWikiList();
         mWikiPagingAdapter = new WikiPagingAdapter(getActivity().getApplicationContext(), wikis);
     }
 
@@ -95,7 +94,7 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
         addNewItemToList(event.hasMoreWikisToDownload(), event.getNewItemsList());
     }
 
-    private void addNewItemToList(boolean hasMoreItems, List<WikiItemResponse> newItems) {
+    private void addNewItemToList(boolean hasMoreItems, List<Wiki> newItems) {
         mHasMoreItems = hasMoreItems;
         mWikiPagingListView.onFinishLoading(mHasMoreItems, newItems);
     }

@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.michalgorny.wikiatask.services.WikiManager;
+import pl.michalgorny.wikiatask.api.services.WikiManager;
 import pl.michalgorny.wikiatask.ui.WikiListFragment;
 
 /**

@@ -1,4 +1,4 @@
-package pl.michalgorny.wikiatask.services.responses;
+package pl.michalgorny.wikiatask.api.responses;
 
 
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class WikiItemResponse {
-    private Long id;
+    private Integer id;
     private String name;
     private String hub;
     private String language;
