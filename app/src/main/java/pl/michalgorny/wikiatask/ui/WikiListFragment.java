@@ -1,5 +1,6 @@
 package pl.michalgorny.wikiatask.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import pl.michalgorny.wikiatask.events.WikiDownloadFailedEvent;
 import pl.michalgorny.wikiatask.api.responses.WikiItemResponse;
 import pl.michalgorny.wikiatask.api.services.WikiManager;
 import pl.michalgorny.wikiatask.pojos.Wiki;
+import timber.log.Timber;
 
 /**
  * Main fragment class which is responsible to display wiki posts on the list
@@ -62,14 +64,24 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.wiki_fragment_list, container, false);
         ButterKnife.inject(this, view);
-        initalizeListView();
         return view;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initalizeListView();
+    }
+
     private void initalizeListView() {
-        mWikiPagingListView.setHasMoreItems(mHasMoreItems);
+        try{ /* In Android 2.3 NullPointerException throws when setHasMoreItems is called */
+            mWikiPagingListView.setHasMoreItems(mHasMoreItems);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
         mWikiPagingListView.setAdapter(mWikiPagingAdapter);
         mWikiPagingListView.setPagingableListener(this);
+        mWikiPagingListView.setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override

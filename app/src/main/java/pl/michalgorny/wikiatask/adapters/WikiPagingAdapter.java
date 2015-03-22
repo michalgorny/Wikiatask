@@ -1,6 +1,7 @@
 package pl.michalgorny.wikiatask.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,47 +17,40 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.michalgorny.wikiatask.R;
 import pl.michalgorny.wikiatask.pojos.Wiki;
-import timber.log.Timber;
 
 /**
  * Adapter populating list of wiki handling
  */
-public class WikiPagingAdapter extends PagingBaseAdapter{
+public class WikiPagingAdapter extends PagingBaseAdapter {
 
     private final Context mContext;
     private final List<Wiki> mWikiList;
     private LayoutInflater mInflater;
-
-    private final int mImageWidth, mImageHeight;
 
     public WikiPagingAdapter(Context context, List<Wiki> list) {
         super(list);
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mWikiList = list;
-        mImageWidth = mContext.getResources().getInteger(R.integer.list_image_width);
-        mImageHeight = mContext.getResources().getInteger(R.integer.list_image_height);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        WikiViewHolderItem viewHolder;
+        final WikiViewHolderItem viewHolder;
 
-        if (convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.wiki_list_item, parent, false);
             viewHolder = new WikiViewHolderItem(convertView);
+            convertView.setBackgroundColor(Color.TRANSPARENT);
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (WikiViewHolderItem) convertView.getTag();
         }
 
-        Wiki wiki = getItem(position);
+        final Wiki wiki = getItem(position);
 
-        viewHolder.title.setText(wiki.getTitle());
-        viewHolder.url.setText(wiki.getUrl());
-
-        if (wiki.getUrlImage() != null && wiki.getUrlImage().isEmpty()){
+        if (wiki.getUrlImage() != null && wiki.getUrlImage().isEmpty()) {
             wiki.setUrlImage(null);
         }
 
@@ -67,14 +61,19 @@ public class WikiPagingAdapter extends PagingBaseAdapter{
          * and we lost some area of picture.
          */
 
-        Timber.d("Downloading " + wiki.getUrlImage());
+        int width = mContext.getResources().getInteger(R.integer.list_image_width);
+        int height = mContext.getResources().getInteger(R.integer.list_image_height);
+
         Picasso.with(mContext)
                 .load(wiki.getUrlImage())
+                .resize(width, height)
                 .centerCrop()
-                .resize(mImageWidth, mImageHeight)
                 .placeholder(R.drawable.photo_placeholder_loading)
                 .error(R.drawable.error_image)
                 .into(viewHolder.image);
+
+        viewHolder.title.setText(wiki.getTitle());
+        viewHolder.url.setText(wiki.getUrl());
 
         return convertView;
     }
@@ -96,9 +95,12 @@ public class WikiPagingAdapter extends PagingBaseAdapter{
 
     static class WikiViewHolderItem {
 
-        @InjectView(R.id.list_item_title) TextView title;
-        @InjectView(R.id.list_item_url) TextView url;
-        @InjectView(R.id.list_item_image) ImageView image;
+        @InjectView(R.id.list_item_title)
+        TextView title;
+        @InjectView(R.id.list_item_url)
+        TextView url;
+        @InjectView(R.id.list_item_image)
+        ImageView image;
 
         public WikiViewHolderItem(View view) {
             ButterKnife.inject(this, view);
