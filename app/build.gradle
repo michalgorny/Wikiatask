@@ -10,8 +10,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,7 +21,6 @@ android {
 
     packagingOptions {
         pickFirst 'META-INF/services/javax.annotation.processing.Processor'
-        exclude 'LICENSE.txt'
     }
 }
 
