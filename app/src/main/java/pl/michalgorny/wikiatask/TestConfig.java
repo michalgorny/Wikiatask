@@ -7,7 +7,7 @@ public class TestConfig {
     /**
      * Time which test will be wait for download wikis on first time
      */
-    public static final int WAITING_FOR_DOWNLOAD_TIME_IN_MILLIS = 1000;
+    public static final int WAITING_FOR_DOWNLOAD_TIME_IN_MILLIS = 3000;
 
     /**
      * Quantity of wikis which are downloaded per one request

@@ -1,5 +1,8 @@
 package pl.michalgorny.wikiatask.ui;
 
+import android.annotation.TargetApi;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

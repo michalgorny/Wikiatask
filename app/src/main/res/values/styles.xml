@@ -6,11 +6,13 @@
     </style>
 
     <style name="item_list_text_title">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/item_list_text_title_size</item>
+        <item name="android:textStyle">italic|bold</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="item_list_text_url">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">@dimen/item_list_text_url_size</item>
     </style>
 
 </resources>

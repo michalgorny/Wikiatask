@@ -6,4 +6,8 @@
     <!-- Size of ImageView in layout for list row -->
     <dimen name="imageview_list_width">130dp</dimen>
     <dimen name="imageview_list_height">130dp</dimen>
+
+    <!-- Dimens for item in list  -->
+    <dimen name="item_list_text_title_size">30sp</dimen>
+    <dimen name="item_list_text_url_size">20sp</dimen>
 </resources>

@@ -3,16 +3,12 @@
     android:layout_height="match_parent"
     tools:context="pl.michalgorny.wikiatask.ui.WikiListFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background_wikia"
-        android:scaleType="matrix"/>
-
     <com.paging.listview.PagingListView
         android:id="@+id/wiki_paging_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="false"
+        android:listSelector="@android:color/transparent"
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/divider_height"/>
 

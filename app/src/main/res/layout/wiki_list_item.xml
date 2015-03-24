@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:clickable="false"
     android:padding="@dimen/list_item_padding">
 
     <ImageView
@@ -10,10 +12,10 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/photo_placeholder_loading"
         android:scaleType="centerCrop"
-        android:id="@+id/list_item_image"/>
+        android:id="@+id/list_item_image" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Large Text"
         style="@style/item_list_text_title"
@@ -23,6 +25,7 @@
         android:id="@+id/list_item_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/item_list_text_url"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"/>
+        android:text="Small Text" />
 </LinearLayout>
