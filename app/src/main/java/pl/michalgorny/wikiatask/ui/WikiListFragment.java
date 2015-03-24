@@ -21,6 +21,7 @@ import butterknife.InjectView;
 import pl.michalgorny.wikiatask.R;
 import pl.michalgorny.wikiatask.WikiApplication;
 import pl.michalgorny.wikiatask.adapters.WikiPagingAdapter;
+import pl.michalgorny.wikiatask.events.ConnectionRestoredEvent;
 import pl.michalgorny.wikiatask.events.NewWikiAvailableEvent;
 import pl.michalgorny.wikiatask.events.WikiDownloadFailedEvent;
 import pl.michalgorny.wikiatask.api.responses.WikiItemResponse;
@@ -114,6 +115,11 @@ public class WikiListFragment extends Fragment implements PagingListView.Paginga
     @Subscribe
     public void handleErrorDownloading(WikiDownloadFailedEvent event){
         Toast.makeText(getActivity(), R.string.download_error_text, Toast.LENGTH_LONG).show();
+    }
+
+    @Subscribe
+    public void handleConnectionRestored(ConnectionRestoredEvent event){
+        mWikiManager.getWikis(false);
     }
 
 }

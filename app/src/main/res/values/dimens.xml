@@ -13,4 +13,6 @@
     <dimen name="imageview_list_width">300dp</dimen>
     <dimen name="imageview_list_height">169dp</dimen>
     <dimen name="divider_height">15dp</dimen>
+    <dimen name="error_image_margin">10dp</dimen>
+    <dimen name="error_text_size">25dp</dimen>
 </resources>

@@ -9,7 +9,7 @@ import com.robotium.solo.Solo;
 import pl.michalgorny.wikiatask.ui.MainActivity;
 import timber.log.Timber;
 
-import static pl.michalgorny.wikiatask.ui.TestHelper.*;
+import static pl.michalgorny.wikiatask.utils.Utils.*;
 
 /**
  *  Test cases for wikis list

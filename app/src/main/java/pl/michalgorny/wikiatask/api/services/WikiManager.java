@@ -33,7 +33,6 @@ import timber.log.Timber;
  */
 public class WikiManager {
 
-    private static final int DEFAULT_BATCH_SIZE = 25;
     private static final int DEFAULT_BATCH_INDEX = 1;
 
     @Inject
